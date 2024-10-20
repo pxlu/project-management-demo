@@ -6,16 +6,13 @@ const schema = a.schema({
       title: a.string(),
       description: a.string(),
       dueDate: a.datetime(),
-      priority: a.integer(),
+      priority: a.enum(["high", "medium", "low"]),
       status: a.enum(["todo", "in_progress", "completed"]),
       owners: a
         .string()
         .array()
         .authorization((allow) => [allow.owner().to(["read"])]),
-      projectId: a
-        .id()
-        .required()
-        .authorization((allow) => [allow.owner().to(["read"])]),
+      projectId: a.id().authorization((allow) => [allow.owner().to(["read"])]),
       project: a.belongsTo("Project", "projectId"),
     })
     .authorization((allow) => [allow.ownersDefinedIn("owners")]),
@@ -23,10 +20,14 @@ const schema = a.schema({
     .model({
       title: a.string(),
       description: a.string(),
-      dueDate: a.datetime(),
-      priority: a.integer(),
-      status: a.string(),
+      startDate: a.datetime(),
+      endDate: a.datetime(),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+      priority: a.enum(["high", "medium", "low"]),
+      status: a.enum(["on_hold", "in_progress", "completed"]),
       tasks: a.hasMany("Task", "projectId"),
+      teamMembers: a.string().array(),
       owner: a.string().authorization((allow) => [allow.owner().to(["read"])]),
     })
     .authorization((allow) => allow.owner()),
