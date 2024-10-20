@@ -7,16 +7,17 @@ import "./../app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
-import { useAuthenticator } from "@aws-amplify/ui-react";
+import { Authenticator } from "@aws-amplify/ui-react";
 import Link from "next/link";
+import { Hub } from "aws-amplify/utils";
 
 Amplify.configure(outputs);
 
-const client = generateClient<Schema>();
+const client = generateClient<Schema>({
+  authMode: "userPool",
+});
 
 export default function App() {
-  const { signOut } = useAuthenticator();
-
   const dashboardSelectionSet = [
     "title",
     "tasks.title",
@@ -37,6 +38,10 @@ export default function App() {
     setDashboardProjects(projects);
   };
 
+  Hub.listen("auth", () => {
+    populateDashboard();
+  });
+
   useEffect(() => {
     populateDashboard();
   }, []);
@@ -48,31 +53,35 @@ export default function App() {
   }
 
   return (
-    <main>
-      <button onClick={signOut}>Sign out</button>
-      <h1>My Projects</h1>
-      <button onClick={createProhject}>+ new</button>
-      <div>
-        <h1>Dashboard</h1>
-        {dashboardProjects.map((p) => (
-          <Link href="">
-            <h2>{p.title}</h2>
-            <h3>Tasks = {p.tasks.length}</h3>
-            <h4>
-              Completed:{" "}
-              {(p.tasks.filter((t) => t.status === "completed").length /
-                p.tasks.length) *
-                100}
-              %
-            </h4>
-            <ul>
-              {p.tasks.map((t) => (
-                <li>{t.title}</li>
-              ))}
-            </ul>
-          </Link>
-        ))}
-      </div>
-    </main>
+    <Authenticator>
+      {({ signOut, user }) => (
+        <main>
+          <button onClick={signOut}>Sign out</button>
+          <h1>My Projects</h1>
+          <button onClick={createProhject}>+ new</button>
+          <div>
+            <h1>Dashboard</h1>
+            {dashboardProjects.map((p) => (
+              <Link href={"/project/${p.id}"}>
+                <h2>{p.title}</h2>
+                <h3>Tasks = {p.tasks.length}</h3>
+                <h4>
+                  Completed:{" "}
+                  {(p.tasks.filter((t) => t.status === "completed").length /
+                    p.tasks.length) *
+                    100}
+                  %
+                </h4>
+                <ul>
+                  {p.tasks.map((t) => (
+                    <li>{t.title}</li>
+                  ))}
+                </ul>
+              </Link>
+            ))}
+          </div>
+        </main>
+      )}
+    </Authenticator>
   );
 }
