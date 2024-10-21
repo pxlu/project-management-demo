@@ -8,11 +8,10 @@ import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import "@aws-amplify/ui-react/styles.css";
 import Link from "next/link";
-import { Hub } from "aws-amplify/utils";
 import ProjectCreate, {
   ValidationResponse,
 } from "@/ui-components/ProjectCreateForm";
-import { ProjectCreateFormValidationValues } from "@/ui-components/ProjectCreateForm";
+import { stringRequired } from "./project/validators";
 
 Amplify.configure(outputs);
 
@@ -47,16 +46,8 @@ export default function App() {
     populateDashboard();
   }, []);
 
-  function createProhject() {
+  function createProject() {
     setShowCreate(!showCreate);
-  }
-
-  function stringRequired(i: string, vr: ValidationResponse) {
-    if (!i) {
-      vr.hasError = true;
-      vr.errorMessage = "Field is required";
-    }
-    return vr;
   }
 
   function CreateForm() {
@@ -76,7 +67,7 @@ export default function App() {
   return (
     <main>
       <h1>My Projects</h1>
-      <button onClick={createProhject}>+ new</button>
+      <button onClick={createProject}>+ new</button>
       <CreateForm />
       <div>
         <h1>Dashboard</h1>
