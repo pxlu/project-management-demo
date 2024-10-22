@@ -1,15 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { generateClient, SelectionSet } from "aws-amplify/data";
 import type { Schema } from "@/amplify/data/resource";
-import "@/app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
-import Link from "next/link";
-import ProjectCreate from "@/ui-components/ProjectCreateForm";
-import { stringRequired } from "./validators";
 import Project from "@/app/components/Project";
+import ProjectCreateModal from "../components/NewsletterModal/ProjectCreateModal";
+import { ProjectCreateFormInputValues } from "../components/ui-components/ProjectCreateForm";
 
 Amplify.configure(outputs);
 
@@ -40,6 +38,7 @@ export default function App() {
     const { data: projects } = await client.models.Project.list({
       selectionSet: dashboardSelectionSet,
     });
+    setShowCreate(false);
     setDashboardProjects(projects);
   };
 
@@ -47,23 +46,9 @@ export default function App() {
     populateDashboard();
   }, []);
 
-  function createProject() {
-    setShowCreate(!showCreate);
-  }
-
-  function CreateForm() {
-    if (showCreate) {
-      return (
-        <ProjectCreate
-          onSuccess={populateDashboard}
-          onError={window.alert}
-          onValidate={{ title: stringRequired }}
-        />
-      );
-    }
-
-    return <div></div>;
-  }
+  const createProject = () => {
+    setShowCreate(true);
+  };
 
   return (
     <main>
@@ -76,32 +61,11 @@ export default function App() {
           Create New Project
         </button>
       </div>
-      <CreateForm />
-      <div>
-        {/* {dashboardProjects.map((p) => (
-          <Link href={`/projects/${p.id}`} key={p.id}>
-            <h2>{p.title}</h2>
-            <h3>Tasks = {p.tasks.length}</h3>
-            <h4>
-              Completed:{" "}
-              {p.tasks.length
-                ? (p.tasks.filter((t) => t.status === "completed").length /
-                    p.tasks.length) *
-                  100
-                : 0}
-              %
-            </h4>
-            <ul>
-              {p.tasks.map((t) => (
-                <li>{t.title}</li>
-              ))}
-            </ul>
-          </Link>
-        ))} */}
+
+      <ProjectCreateModal isOpen={showCreate} onSuccess={populateDashboard} />
+      <div className="flex flex-row flex-wrap">
         {dashboardProjects.map((p) => (
-          // <Link href={`/projects/${p.id}`} key={p.id}>
           <Project key={p.id} {...p} />
-          // </Link>
         ))}
       </div>
     </main>

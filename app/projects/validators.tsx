@@ -1,4 +1,4 @@
-import { ValidationResponse } from "@/ui-components/ProjectCreateForm";
+import { ValidationResponse } from "@/app/components/ui-components/ProjectCreateForm";
 
 export const stringRequired = (i: string, vr: ValidationResponse) => {
   if (!i) {

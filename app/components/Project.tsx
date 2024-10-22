@@ -1,6 +1,7 @@
 import React from "react";
 import type { Schema } from "@/amplify/data/resource";
 import { SelectionSet } from "aws-amplify/api";
+import Link from "next/link";
 
 const dashboardSelectionSet = [
   "id",
@@ -29,14 +30,16 @@ const Project: React.FC<DashboardProject> = ({ ...props }) => {
           </p>
           <p>{props.priority}</p>
           <p>{props.status}</p>
-          <p>Number of tasks: {props.tasks.length}</p>
+          <p className="py-2">Number of tasks: {props.tasks.length}</p>
 
-          <button
+          <Link
+            href={`/projects/${props.id}`}
+            key={props.id}
             className="rounded-md bg-slate-800 py-2 px-4 mt-6 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             type="button"
           >
-            Read more
-          </button>
+            View Project Details
+          </Link>
         </div>
       </div>
     </div>
