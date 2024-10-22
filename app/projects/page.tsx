@@ -6,10 +6,10 @@ import type { Schema } from "@/amplify/data/resource";
 import "@/app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
-import "@aws-amplify/ui-react/styles.css";
 import Link from "next/link";
 import ProjectCreate from "@/ui-components/ProjectCreateForm";
 import { stringRequired } from "./validators";
+import Project from "@/app/components/Project";
 
 Amplify.configure(outputs);
 
@@ -21,6 +21,9 @@ export default function App() {
   const dashboardSelectionSet = [
     "id",
     "title",
+    "description",
+    "priority",
+    "status",
     "tasks.title",
     "tasks.status",
   ] as const;
@@ -64,13 +67,19 @@ export default function App() {
 
   return (
     <main>
-      <h1 className="text-3xl font-bold underline">My Projects</h1>
-      <button onClick={createProject}>+ new</button>
+      <div className="flex flex-row justify-between items-center">
+        <h1 className="text-4xl font-bold p-8">My Projects</h1>
+        <button
+          className="rounded-2xl bg-slate-500 h-10 w-1/6 float-right mr-10"
+          onClick={createProject}
+        >
+          Create New Project
+        </button>
+      </div>
       <CreateForm />
       <div>
-        <h1>Dashboard</h1>
-        {dashboardProjects.map((p) => (
-          <Link href={`/project/${p.id}`} key={p.id}>
+        {/* {dashboardProjects.map((p) => (
+          <Link href={`/projects/${p.id}`} key={p.id}>
             <h2>{p.title}</h2>
             <h3>Tasks = {p.tasks.length}</h3>
             <h4>
@@ -88,6 +97,11 @@ export default function App() {
               ))}
             </ul>
           </Link>
+        ))} */}
+        {dashboardProjects.map((p) => (
+          // <Link href={`/projects/${p.id}`} key={p.id}>
+          <Project key={p.id} {...p} />
+          // </Link>
         ))}
       </div>
     </main>

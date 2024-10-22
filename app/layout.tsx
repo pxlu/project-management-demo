@@ -2,9 +2,7 @@
 
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Authenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
-import Navbar from "../ui-components/navbar/Navbar";
+import AcmeNavbar from "./components/AcmeNavbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,9 +14,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="pb-8">
-          <Navbar />
-        </div>
+        {/* <Navbar /> */}
+        <AcmeNavbar />
         {children}
       </body>
     </html>
