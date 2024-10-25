@@ -10,6 +10,7 @@ const dashboardSelectionSet = [
   "description",
   "priority",
   "status",
+  "updatedAt",
   "tasks.title",
   "tasks.status",
 ] as const;
@@ -41,16 +42,23 @@ const Project: React.FC<DashboardProject> = ({ ...props }) => {
           <span className="font-bold">Status:</span>{" "}
           {convertStatusText(props.status)}
         </p>
-        <p className="py-2">Number of tasks: {props.tasks.length}</p>
+        <p>
+          <span className="font-bold">Tasks:</span> {props.tasks.length}
+        </p>
 
-        <Link
-          href={`/projects/${props.id}`}
-          key={props.id}
-          className="rounded-md bg-slate-800 py-2 px-4 mt-6 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-          type="button"
-        >
-          View Project Details
-        </Link>
+        <div className="py-4">
+          {" "}
+          <Link
+            href={`/projects/${props.id}`}
+            key={props.id}
+            className="rounded-md bg-slate-800 py-2 px-4 mt-6 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+            type="button"
+          >
+            Project Details
+          </Link>
+        </div>
+        <hr />
+        <div className="pt-3">Last Updated: {props.updatedAt}</div>
       </div>
     </div>
   );

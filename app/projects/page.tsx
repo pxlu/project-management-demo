@@ -54,16 +54,17 @@ export default function App() {
   };
 
   return (
-    <main>
+    <main className="bg-slate-200">
       <div className="flex flex-row justify-between items-center">
         <h1 className="text-4xl font-bold p-8">My Projects</h1>
         <button
           className="rounded-2xl bg-[#579dff] h-10 px-4 float-right mr-10"
           onClick={createProject}
         >
-          <span className="font-semibold"> Create New Project</span>
+          <span className="font-sans"> Create New Project</span>
         </button>
       </div>
+      <hr className="h-0.5 w-11/12 mx-auto bg-black" />
 
       <ProjectCreateModal isOpen={showCreate} onSuccess={populateDashboard} />
       <div className="flex flex-row flex-wrap">

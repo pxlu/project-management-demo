@@ -61,20 +61,37 @@ export default function Page({ params }: { params: { id: string } }) {
   }, []);
 
   return (
-    <main className="p-10">
-      <h1 className="text-4xl py-4 font-bold">{project.title}</h1>
-      <h3 className="text-xl py-4">{project.description}</h3>
-      <div className="text-lg">
-        <span className="font-bold">Priority: </span>{" "}
-        {project.priority
-          ? project.priority[0].toUpperCase() + project.priority.slice(1)
-          : "N/A"}
+    <main className="p-12">
+      <div className="flex flex-row justify-between items-center py-4">
+        <h1 className="text-6xl">
+          <span className=" font-bold">Project / </span>
+          {project.title}
+        </h1>
+        <button className="rounded-2xl bg-[#579dff] w-1/12 h-10 px-4 float-right mr-10">
+          <span className="font-sans font-semibold"> + New Task</span>
+        </button>
       </div>
-      <div className="text-lg">
-        <span className="font-bold">Status:</span>{" "}
-        {convertStatusText(project.status)}
+      <hr />
+
+      <div className="pb-4">
+        <h3 className="text-xl py-4">{project.description}</h3>
+        <div className="text-lg">
+          <span className="font-bold">Priority: </span>{" "}
+          {project.priority
+            ? project.priority[0].toUpperCase() + project.priority.slice(1)
+            : "N/A"}
+        </div>
+        <div className="text-lg">
+          <span className="font-bold">Status:</span>{" "}
+          {convertStatusText(project.status)}
+        </div>
+        <div className="text-lg">
+          <span className="font-bold">Last Updated:</span> {project.updatedAt}
+        </div>
       </div>
-      <h2 className="py-4">Tasks</h2>
+      <hr />
+
+      <h2 className="py-4 text-2xl font-semibold">Tasks</h2>
       <ul>
         {project.tasks?.map((t) => (
           <li>

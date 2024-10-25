@@ -2,13 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.msg-box {
-  padding: 1em;
-  max-width: 400px;
-  margin-top: 2em;
-  margin-bottom: 2em;
-  border-radius: 0.5em;
-  border: 2px solid darkgreen;
-  background: lightgreen;
-  color: darkgreen;
+html,
+body,
+main,
+#app,
+#app > div {
+  height: 100%;
 }
