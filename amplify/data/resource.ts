@@ -11,11 +11,19 @@ const schema = a.schema({
       owners: a
         .string()
         .array()
-        .authorization((allow) => [allow.owner().to(["read"])]),
-      projectId: a.id().authorization((allow) => [allow.owner().to(["read"])]),
+        .authorization((allow) => [
+          allow.ownersDefinedIn("owners").to(["read"]),
+          allow.owner(),
+        ]),
+      projectId: a
+        .id()
+        .authorization((allow) => [
+          allow.ownersDefinedIn("owners").to(["read"]),
+          allow.owner(),
+        ]),
       project: a.belongsTo("Project", "projectId"),
     })
-    .authorization((allow) => [allow.ownersDefinedIn("owners")]),
+    .authorization((allow) => [allow.ownersDefinedIn("owners"), allow.owner()]),
   Project: a
     .model({
       title: a.string(),
