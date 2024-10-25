@@ -3,6 +3,7 @@ import type { Schema } from "@/amplify/data/resource";
 import { SelectionSet } from "aws-amplify/api";
 import Link from "next/link";
 import { convertStatusText } from "../projects/utils";
+import dayjs from "dayjs";
 
 const dashboardSelectionSet = [
   "id",
@@ -20,6 +21,8 @@ type DashboardProject = SelectionSet<
 >;
 
 const Project: React.FC<DashboardProject> = ({ ...props }) => {
+  const updatedAtString = dayjs(props.updatedAt).format("DD/MM/YYYY HH:mm");
+
   return (
     <div className="relative flex flex-col m-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 min-h-140">
       <div className="p-4">
@@ -58,7 +61,10 @@ const Project: React.FC<DashboardProject> = ({ ...props }) => {
           </Link>
         </div>
         <hr />
-        <div className="pt-3">Last Updated: {props.updatedAt}</div>
+        <div className="pt-3">
+          <span className="font-semibold">Updated: </span>
+          {updatedAtString}
+        </div>
       </div>
     </div>
   );

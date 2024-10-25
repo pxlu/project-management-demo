@@ -5,8 +5,9 @@ import { generateClient, SelectionSet } from "aws-amplify/data";
 import type { Schema } from "@/amplify/data/resource";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
-import Table from "@/app/components/Table";
 import { convertStatusText } from "../utils";
+import dayjs from "dayjs";
+import CreateTaskModal from "@/app/components/CreateTaskModal/CreateTaskModal";
 
 Amplify.configure(outputs);
 
@@ -44,11 +45,18 @@ export default function Page({ params }: { params: { id: string } }) {
     tasks: [],
   });
 
+  const updatedAtString = dayjs(project.updatedAt).format("DD/MM/YYYY HH:mm");
+  const [showCreateTask, setShowCreateTask] = useState(false);
+  const handleCreateTask = () => {
+    setShowCreateTask(true);
+  };
+
   const loadContents = async function () {
     const p = await client.models.Project.get(
       { id: params.id },
       { selectionSet: projectEager }
     );
+    setShowCreateTask(false);
     if (p.data) {
       setProject(p.data);
     } else {
@@ -62,12 +70,22 @@ export default function Page({ params }: { params: { id: string } }) {
 
   return (
     <main className="p-12">
+      <CreateTaskModal
+        isOpen={showCreateTask}
+        onSuccess={loadContents}
+        onError={(e: any, m: any) => console.log(m)}
+        projectId={params.id}
+      />
+
       <div className="flex flex-row justify-between items-center py-4">
         <h1 className="text-6xl">
           <span className=" font-bold">Project / </span>
           {project.title}
         </h1>
-        <button className="rounded-2xl bg-[#579dff] w-1/12 h-10 px-4 float-right mr-10">
+        <button
+          className="rounded-2xl bg-[#579dff] w-1/12 h-10 px-4 float-right mr-10"
+          onClick={handleCreateTask}
+        >
           <span className="font-sans font-semibold"> + New Task</span>
         </button>
       </div>
@@ -86,7 +104,7 @@ export default function Page({ params }: { params: { id: string } }) {
           {convertStatusText(project.status)}
         </div>
         <div className="text-lg">
-          <span className="font-bold">Last Updated:</span> {project.updatedAt}
+          <span className="font-bold">Last Updated:</span> {updatedAtString}
         </div>
       </div>
       <hr />
@@ -94,7 +112,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <h2 className="py-4 text-2xl font-semibold">Tasks</h2>
       <ul>
         {project.tasks?.map((t) => (
-          <li>
+          <li key={t.id}>
             <div>
               <h3>{t.title}</h3>
               <p>{t.description}</p>
