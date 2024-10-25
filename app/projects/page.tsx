@@ -6,8 +6,7 @@ import type { Schema } from "@/amplify/data/resource";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
 import Project from "@/app/components/Project";
-import ProjectCreateModal from "../components/NewsletterModal/ProjectCreateModal";
-import { ProjectCreateFormInputValues } from "../components/ui-components/ProjectCreateForm";
+import ProjectCreateModal from "../components/ProjectCreateModal/ProjectCreateModal";
 
 Amplify.configure(outputs);
 
@@ -21,6 +20,10 @@ export default function App() {
     "title",
     "description",
     "priority",
+    "startDate",
+    "endDate",
+    "updatedAt",
+    "createdAt",
     "status",
     "tasks.title",
     "tasks.status",
@@ -55,10 +58,10 @@ export default function App() {
       <div className="flex flex-row justify-between items-center">
         <h1 className="text-4xl font-bold p-8">My Projects</h1>
         <button
-          className="rounded-2xl bg-slate-500 h-10 w-1/6 float-right mr-10"
+          className="rounded-2xl bg-[#579dff] h-10 px-4 float-right mr-10"
           onClick={createProject}
         >
-          Create New Project
+          <span className="font-semibold"> Create New Project</span>
         </button>
       </div>
 

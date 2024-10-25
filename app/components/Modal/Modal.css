@@ -1,10 +1,10 @@
 .modal {
-  max-width: 20rem;
   padding: 2rem;
   border: 0;
   border-radius: 0.5rem;
   position: relative;
   box-shadow: hsl(0 0% 0% / 10%) 0 0 0.5rem 0.25rem;
+  @apply bg-slate-100;
 }
 
 .modal::backdrop {

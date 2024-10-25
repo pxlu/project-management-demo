@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import "./NewsletterModal.css";
+import "./ProjectCreateModal.css";
 import Modal from "../Modal/Modal";
-import ProjectCreate, {
-  ProjectCreateFormInputValues,
-} from "@/app/components/ui-components/ProjectCreateForm";
+import ProjectCreate from "@/app/components/ui-components/ProjectCreateForm";
 
 interface CreateProjectModalProps {
   isOpen: boolean;

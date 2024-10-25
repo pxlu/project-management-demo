@@ -1,0 +1,27 @@
+.form-row + .form-row {
+  margin-top: 1rem;
+}
+
+.form-row label,
+.form-row input,
+.form-row select,
+.form-row button {
+  width: 100%;
+  display: block;
+}
+
+.amplify-field {
+  @apply text-xl py-2;
+}
+
+.amplify-input {
+  @apply p-3 rounded;
+}
+
+.amplify-select {
+  @apply p-3;
+}
+
+.amplify-button {
+  @apply rounded bg-slate-200 p-2;
+}

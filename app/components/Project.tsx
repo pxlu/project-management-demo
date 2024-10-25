@@ -2,6 +2,7 @@ import React from "react";
 import type { Schema } from "@/amplify/data/resource";
 import { SelectionSet } from "aws-amplify/api";
 import Link from "next/link";
+import { convertStatusText } from "../projects/utils";
 
 const dashboardSelectionSet = [
   "id",
@@ -19,28 +20,37 @@ type DashboardProject = SelectionSet<
 
 const Project: React.FC<DashboardProject> = ({ ...props }) => {
   return (
-    <div>
-      <div className="relative flex flex-col m-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96">
-        <div className="p-4">
-          <h5 className="mb-2 text-slate-800 text-xl font-semibold">
-            {props.title}
-          </h5>
-          <p className="text-slate-600 leading-normal font-light">
-            {props.description}
-          </p>
-          <p>{props.priority}</p>
-          <p>{props.status}</p>
-          <p className="py-2">Number of tasks: {props.tasks.length}</p>
+    <div className="relative flex flex-col m-6 bg-white shadow-sm border border-slate-200 rounded-lg w-96 min-h-140">
+      <div className="p-4">
+        <h5 className="mb-2 text-slate-800 text-xl font-semibold">
+          <span className="font-semibold">Project /</span>{" "}
+          {props.title ? props.title : `N/A`}
+        </h5>
+        <p className="text-slate-600 leading-normal font-light pb-2">
+          {props.description}
+        </p>
+        <p>
+          {" "}
+          <span className="font-bold">Priority: </span>{" "}
+          {props.priority
+            ? props.priority[0].toUpperCase() + props.priority.slice(1)
+            : "N/A"}
+        </p>
+        <p>
+          {" "}
+          <span className="font-bold">Status:</span>{" "}
+          {convertStatusText(props.status)}
+        </p>
+        <p className="py-2">Number of tasks: {props.tasks.length}</p>
 
-          <Link
-            href={`/projects/${props.id}`}
-            key={props.id}
-            className="rounded-md bg-slate-800 py-2 px-4 mt-6 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-            type="button"
-          >
-            View Project Details
-          </Link>
-        </div>
+        <Link
+          href={`/projects/${props.id}`}
+          key={props.id}
+          className="rounded-md bg-slate-800 py-2 px-4 mt-6 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+          type="button"
+        >
+          View Project Details
+        </Link>
       </div>
     </div>
   );

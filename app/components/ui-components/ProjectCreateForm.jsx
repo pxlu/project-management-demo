@@ -586,6 +586,7 @@ export default function ProjectCreateForm(props) {
       </ArrayField>
       <Flex
         justifyContent="space-between"
+        display="flex"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
