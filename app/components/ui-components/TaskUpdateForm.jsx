@@ -18,7 +18,9 @@ import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { getTask } from "./graphql/queries";
 import { updateTask } from "./graphql/mutations";
-const client = generateClient();
+const client = generateClient({
+  authMode: "userPool",
+});
 function ArrayField({
   items = [],
   onChange,

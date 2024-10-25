@@ -17,7 +17,11 @@ import {
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { createTask } from "./graphql/mutations";
-const client = generateClient();
+
+const client = generateClient({
+  authMode: "userPool",
+});
+
 function ArrayField({
   items = [],
   onChange,
@@ -182,6 +186,7 @@ export default function TaskCreateForm(props) {
     onValidate,
     onChange,
     overrides,
+    projectId,
     ...rest
   } = props;
   const initialValues = {
@@ -255,6 +260,7 @@ export default function TaskCreateForm(props) {
     }, {});
     return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
   };
+
   return (
     <Grid
       as="form"
@@ -299,11 +305,13 @@ export default function TaskCreateForm(props) {
               modelFields[key] = null;
             }
           });
+
           await client.graphql({
             query: createTask.replaceAll("__typename", ""),
             variables: {
               input: {
                 ...modelFields,
+                projectId: projectId,
               },
             },
           });

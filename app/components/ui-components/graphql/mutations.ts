@@ -40,20 +40,6 @@ export const createTask = /* GraphQL */ `
       owner
       owners
       priority
-      project {
-        createdAt
-        description
-        endDate
-        id
-        owner
-        priority
-        startDate
-        status
-        teamMembers
-        title
-        updatedAt
-        __typename
-      }
       projectId
       status
       title
@@ -100,20 +86,6 @@ export const deleteTask = /* GraphQL */ `
       owner
       owners
       priority
-      project {
-        createdAt
-        description
-        endDate
-        id
-        owner
-        priority
-        startDate
-        status
-        teamMembers
-        title
-        updatedAt
-        __typename
-      }
       projectId
       status
       title
@@ -160,20 +132,6 @@ export const updateTask = /* GraphQL */ `
       owner
       owners
       priority
-      project {
-        createdAt
-        description
-        endDate
-        id
-        owner
-        priority
-        startDate
-        status
-        teamMembers
-        title
-        updatedAt
-        __typename
-      }
       projectId
       status
       title
