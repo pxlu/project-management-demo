@@ -8,7 +8,6 @@ import outputs from "@/amplify_outputs.json";
 import { convertStatusText } from "../utils";
 import dayjs from "dayjs";
 import CreateTaskModal from "@/app/components/CreateTaskModal/CreateTaskModal";
-import Table from "@/app/components/Table";
 import {
   createColumnHelper,
   useReactTable,
@@ -16,6 +15,16 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 
+import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
+// Theme
+import { ColDef, ModuleRegistry } from "@ag-grid-community/core";
+import { AgGridReact } from "@ag-grid-community/react";
+// React Grid Logic
+import "@ag-grid-community/styles/ag-grid.css";
+// Core CSS
+import "@ag-grid-community/styles/ag-theme-quartz.css";
+
+ModuleRegistry.registerModules([ClientSideRowModelModule]);
 Amplify.configure(outputs);
 
 const client = generateClient<Schema>({
@@ -75,23 +84,15 @@ export default function Page({ params }: { params: { id: string } }) {
     loadContents();
   }, []);
 
-  // Task Table
-  const taskTableColumns = [
-    { Header: "Title", accessor: "title" },
-    { Header: "Due Date", accessor: "dueDate" },
-    { Header: "Priority", accessor: "priority" },
-    { Header: "Status", accessor: "status" },
-  ];
-
   // Task Table (Tanstack)
-  type Task = {
+  interface Task {
     title: string;
     description: string;
     dueDate: string;
     priority: string;
     status: string;
     // TODO: owners of the task + shorten description
-  };
+  }
 
   const TaskData: Task[] = project.tasks?.map((task) => ({
     title: task.title ? task.title : "N/A",
@@ -103,35 +104,18 @@ export default function Page({ params }: { params: { id: string } }) {
     status: task.status ? task.status : "N/A",
   }));
 
-  const columnHelper = createColumnHelper<Task>();
-  const defaultColumns = [
-    columnHelper.accessor("title", {
-      cell: (info) => info.getValue(),
-      footer: (props) => props.column.id,
-    }),
-    columnHelper.accessor("description", {
-      cell: (info) => info.getValue(),
-      footer: (props) => props.column.id,
-    }),
-    columnHelper.accessor("dueDate", {
-      cell: (info) => info.getValue(),
-      footer: (props) => props.column.id,
-    }),
-    columnHelper.accessor("priority", {
-      cell: (info) => info.getValue(),
-      footer: (props) => props.column.id,
-    }),
-    columnHelper.accessor("status", {
-      cell: (info) => info.getValue(),
-      footer: (props) => props.column.id,
-    }),
-  ];
+  // Column Definitions: Defines & controls grid columns.
+  const [colDefs, setColDefs] = useState<ColDef<Task>[]>([
+    { field: "title", filter: true },
+    { field: "description" },
+    { field: "dueDate" },
+    { field: "priority" },
+    { field: "status" },
+  ]);
 
-  const taskTable = useReactTable({
-    columns: defaultColumns,
-    data: TaskData,
-    getCoreRowModel: getCoreRowModel(),
-  });
+  const defaultColDef = {
+    flex: 1,
+  };
 
   return (
     <main className="p-12">
@@ -175,52 +159,15 @@ export default function Page({ params }: { params: { id: string } }) {
       <hr />
 
       <h2 className="py-4 text-2xl font-semibold">Tasks</h2>
-      <div className="p-2">
-        <table>
-          <thead>
-            {taskTable.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {taskTable.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            {taskTable.getFooterGroups().map((footerGroup) => (
-              <tr key={footerGroup.id}>
-                {footerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.footer,
-                          header.getContext()
-                        )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </tfoot>
-        </table>
+      <div
+        className={"ag-theme-quartz-dark"}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <AgGridReact
+          rowData={TaskData}
+          columnDefs={colDefs}
+          defaultColDef={defaultColDef}
+        />
       </div>
     </main>
   );

@@ -9,10 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ag-grid-community/client-side-row-model": "^32.3.0",
+    "@ag-grid-community/core": "^32.3.0",
+    "@ag-grid-community/react": "^32.3.0",
+    "@ag-grid-community/styles": "^32.3.0",
     "@aws-amplify/ui-react": "^6.1.13",
     "@headlessui/react": "^2.1.10",
     "@heroicons/react": "^2.1.5",
     "@tanstack/react-table": "^8.20.5",
+    "ag-grid-community": "^32.3.0",
     "ag-grid-react": "^32.3.0",
     "aws-amplify": "^6.4.0",
     "dayjs": "^1.11.13",
