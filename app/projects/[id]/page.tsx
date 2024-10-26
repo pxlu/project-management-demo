@@ -8,13 +8,6 @@ import outputs from "@/amplify_outputs.json";
 import { convertStatusText } from "../utils";
 import dayjs from "dayjs";
 import CreateTaskModal from "@/app/components/CreateTaskModal/CreateTaskModal";
-import {
-  createColumnHelper,
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-} from "@tanstack/react-table";
-
 import { ClientSideRowModelModule } from "@ag-grid-community/client-side-row-model";
 // Theme
 import { ColDef, ModuleRegistry } from "@ag-grid-community/core";
@@ -107,10 +100,10 @@ export default function Page({ params }: { params: { id: string } }) {
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState<ColDef<Task>[]>([
     { field: "title", filter: true },
-    { field: "description" },
-    { field: "dueDate" },
-    { field: "priority" },
-    { field: "status" },
+    { field: "description", filter: true },
+    { field: "dueDate", filter: true, sort: "desc" },
+    { field: "priority", filter: true },
+    { field: "status", filter: true },
   ]);
 
   const defaultColDef = {
@@ -160,13 +153,14 @@ export default function Page({ params }: { params: { id: string } }) {
 
       <h2 className="py-4 text-2xl font-semibold">Tasks</h2>
       <div
-        className={"ag-theme-quartz-dark"}
+        className={`ag-theme-quartz-dark pb-10`}
         style={{ width: "100%", height: "100%" }}
       >
         <AgGridReact
           rowData={TaskData}
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
+          pagination={true}
         />
       </div>
     </main>
