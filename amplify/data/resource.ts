@@ -1,13 +1,4 @@
-import {
-  type ClientSchema,
-  a,
-  defineData,
-  defineFunction,
-} from "@aws-amplify/backend";
-
-const taskHandler = defineFunction({
-  entry: "./tasks/handler.ts",
-});
+import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 const schema = a.schema({
   Task: a
@@ -16,7 +7,7 @@ const schema = a.schema({
       description: a.string(),
       dueDate: a.datetime(),
       priority: a.ref("PriorityEnum").required(),
-      status: a.ref("StatusEnum").required(),
+      status: a.ref("TaskStatusEnum").required(),
       owners: a
         .string()
         .array()
@@ -83,6 +74,7 @@ const schema = a.schema({
     .authorization((allow) => allow.owner()),
   PriorityEnum: a.enum(["high", "medium", "low"]),
   StatusEnum: a.enum(["on_hold", "in_progress", "completed"]),
+  TaskStatusEnum: a.enum(["todo", "in_progress", "completed"]),
 
   // CreateTask: a
   //   .mutation()

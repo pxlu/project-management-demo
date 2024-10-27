@@ -17,6 +17,7 @@ import "@ag-grid-community/styles/ag-grid.css";
 // Core CSS
 import "@ag-grid-community/styles/ag-theme-quartz.css";
 import TaskCellRenderer from "@/app/components/TaskButtonRenderer";
+import { useRouter } from "next/navigation";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 Amplify.configure(outputs);
@@ -26,6 +27,7 @@ const client = generateClient<Schema>({
 });
 
 export default function Page({ params }: { params: { id: string } }) {
+  const router = useRouter();
   const projectEager = [
     "id",
     "title",
@@ -59,6 +61,24 @@ export default function Page({ params }: { params: { id: string } }) {
   const [showCreateTask, setShowCreateTask] = useState(false);
   const handleCreateTask = () => {
     setShowCreateTask(true);
+  };
+
+  const handleDeleteProject = async () => {
+    if (
+      confirm(
+        "Are you sure you want to delete this project? This action cannot be undone"
+      )
+    ) {
+      const deleted = await client.models.Project.delete({ id: params.id });
+      if (deleted.errors) {
+        alert(
+          `Failed to delete: ${deleted.errors.map((e) => e.message).join("; ")}`
+        );
+      } else if (deleted.data) {
+        alert(`Project ${deleted.data.title} deleted`);
+        router.push("/projects");
+      }
+    }
   };
 
   const loadContents = async function () {
@@ -165,6 +185,12 @@ export default function Page({ params }: { params: { id: string } }) {
           onClick={handleCreateTask}
         >
           <span className="font-sans font-semibold"> + New Task</span>
+        </button>
+        <button
+          className="rounded-2xl bg-[#ff0000] h-10 px-4 float-right mr-10"
+          onClick={handleDeleteProject}
+        >
+          <span className="font-sans font-semibold">Delete Project</span>
         </button>
       </div>
       <hr />
