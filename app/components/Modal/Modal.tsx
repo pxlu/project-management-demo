@@ -3,6 +3,7 @@ import "./Modal.css";
 
 interface ModalProps {
   isOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   hasCloseBtn?: boolean;
   onClose?: () => void;
   children: React.ReactNode;
@@ -10,11 +11,11 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
+  setModalOpen,
   hasCloseBtn = true,
   onClose,
   children,
 }) => {
-  const [isModalOpen, setModalOpen] = useState(isOpen);
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
   const handleCloseModal = () => {
@@ -31,20 +32,16 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   useEffect(() => {
-    setModalOpen(isOpen);
-  }, [isOpen]);
-
-  useEffect(() => {
     const modalElement = modalRef.current;
 
     if (modalElement) {
-      if (isModalOpen) {
+      if (isOpen) {
         modalElement.showModal();
       } else {
         modalElement.close();
       }
     }
-  }, [isModalOpen]);
+  }, [isOpen]);
 
   return (
     <dialog ref={modalRef} onKeyDown={handleKeyDown} className="modal">

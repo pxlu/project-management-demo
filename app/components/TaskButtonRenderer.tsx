@@ -10,7 +10,11 @@ const TaskCellRenderer: React.FC<any> = (params) => {
 
   return (
     <>
-      <TaskModal isOpen={showTaskModal} data={data} />
+      <TaskModal
+        isOpen={showTaskModal}
+        setModalOpen={setShowTaskModal}
+        data={data}
+      />
       <button
         className="px-2 rounded-xl bg-[#2596be]"
         onClick={handleShowTaskModal}

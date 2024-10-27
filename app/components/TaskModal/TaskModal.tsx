@@ -8,6 +8,7 @@ import outputs from "@/amplify_outputs.json";
 
 interface TaskModalProps {
   isOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: {
     id: string;
     title: string;
@@ -24,7 +25,11 @@ const client = generateClient<Schema>({
   authMode: "userPool",
 });
 
-const TaskModal: React.FC<TaskModalProps> = ({ isOpen, data }) => {
+const TaskModal: React.FC<TaskModalProps> = ({
+  isOpen,
+  setModalOpen,
+  data,
+}) => {
   const focusInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleDeleteTask = async () => {
@@ -40,7 +45,6 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, data }) => {
         );
       } else if (deleted.data) {
         alert(`Task ${deleted.data.title} deleted`);
-        isOpen = false;
       }
     }
   };
@@ -54,7 +58,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, data }) => {
   }, [isOpen]);
 
   return (
-    <Modal hasCloseBtn={true} isOpen={isOpen}>
+    <Modal hasCloseBtn={true} setModalOpen={setModalOpen} isOpen={isOpen}>
       <div className="h-[75vh] w-[75vw] text-black">
         <div className="flex flex-row justify-between items-center py-4">
           <h1 className="text-6xl">{data.title}</h1>
