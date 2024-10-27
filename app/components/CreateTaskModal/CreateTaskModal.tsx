@@ -4,6 +4,7 @@ import TaskCreateForm from "../ui-components/TaskCreateForm";
 
 interface CreateTaskModalProps {
   isOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSuccess: () => Promise<void>;
   onError: (e: any, m: any) => void;
   projectId: string;
@@ -11,6 +12,7 @@ interface CreateTaskModalProps {
 
 const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   isOpen,
+  setModalOpen,
   onSuccess,
   onError,
   projectId,
@@ -26,7 +28,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
   }, [isOpen]);
 
   return (
-    <Modal hasCloseBtn={true} isOpen={isOpen}>
+    <Modal hasCloseBtn={true} setModalOpen={setModalOpen} isOpen={isOpen}>
       <div>Hello World</div>
       <TaskCreateForm
         onSuccess={onSuccess}

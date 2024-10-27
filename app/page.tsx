@@ -9,8 +9,6 @@ import { useEffect } from "react";
 import { Hub } from "aws-amplify/utils";
 import { useRouter } from "next/navigation";
 import WelcomeSplash from "./components/WelcomeSplash/WelcomeSplash";
-import "@/app/globals.css";
-import "@aws-amplify/ui-react/styles.css"; // default theme
 
 Amplify.configure(outputs);
 

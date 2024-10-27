@@ -1,9 +1,10 @@
 "use client";
 
 import { Inter } from "next/font/google";
-import "./globals.css";
 import AcmeNavbar from "./components/AcmeNavbar";
 import { Authenticator } from "@aws-amplify/ui-react";
+import "@aws-amplify/ui-react/styles.css"; // default theme
+import "@/app/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

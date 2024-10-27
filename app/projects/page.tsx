@@ -66,7 +66,11 @@ export default function App() {
       </div>
       <hr className="h-0.5 w-11/12 mx-auto bg-black" />
 
-      <ProjectCreateModal isOpen={showCreate} onSuccess={populateDashboard} />
+      <ProjectCreateModal
+        isOpen={showCreate}
+        setModalOpen={setShowCreate}
+        onSuccess={populateDashboard}
+      />
       <div className="flex flex-row flex-wrap">
         {dashboardProjects.map((p) => (
           <Project key={p.id} {...p} />

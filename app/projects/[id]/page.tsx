@@ -69,7 +69,12 @@ export default function Page({ params }: { params: { id: string } }) {
         "Are you sure you want to delete this project? This action cannot be undone"
       )
     ) {
-      const deleted = await client.models.Project.delete({ id: params.id });
+      const deleted = await client.models.Project.delete(
+        { id: params.id },
+        {
+          authMode: "userPool",
+        }
+      );
       if (deleted.errors) {
         alert(
           `Failed to delete: ${deleted.errors.map((e) => e.message).join("; ")}`
@@ -170,6 +175,7 @@ export default function Page({ params }: { params: { id: string } }) {
     <main className="p-12">
       <CreateTaskModal
         isOpen={showCreateTask}
+        setModalOpen={setShowCreateTask}
         onSuccess={loadContents}
         onError={(e: any, m: any) => console.log(m)}
         projectId={params.id}

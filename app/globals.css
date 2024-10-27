@@ -9,3 +9,7 @@ main,
 #app > div {
   height: 100vh;
 }
+
+div[data-amplify-authenticator] {
+  min-height: 90vh;
+}

@@ -5,11 +5,13 @@ import ProjectCreate from "@/app/components/ui-components/ProjectCreateForm";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onSuccess: () => Promise<void>;
 }
 
 const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   isOpen,
+  setModalOpen,
   onSuccess,
 }) => {
   const focusInputRef = useRef<HTMLInputElement | null>(null);
@@ -23,7 +25,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
   }, [isOpen]);
 
   return (
-    <Modal hasCloseBtn={true} isOpen={isOpen}>
+    <Modal hasCloseBtn={true} setModalOpen={setModalOpen} isOpen={isOpen}>
       <ProjectCreate onSuccess={onSuccess} />
     </Modal>
   );
