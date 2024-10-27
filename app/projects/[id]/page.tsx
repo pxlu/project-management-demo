@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { generateClient, SelectionSet } from "aws-amplify/data";
 import type { Schema } from "@/amplify/data/resource";
 import { Amplify } from "aws-amplify";
@@ -16,6 +16,7 @@ import { AgGridReact } from "@ag-grid-community/react";
 import "@ag-grid-community/styles/ag-grid.css";
 // Core CSS
 import "@ag-grid-community/styles/ag-theme-quartz.css";
+import TaskCellRenderer from "@/app/components/TaskButtonRenderer";
 
 ModuleRegistry.registerModules([ClientSideRowModelModule]);
 Amplify.configure(outputs);
@@ -79,6 +80,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // Task Table (Tanstack)
   interface Task {
+    id: string;
     title: string;
     description: string;
     dueDate: string;
@@ -88,6 +90,7 @@ export default function Page({ params }: { params: { id: string } }) {
   }
 
   const TaskData: Task[] = project.tasks?.map((task) => ({
+    id: task.id,
     title: task.title ? task.title : "N/A",
     description: task.description ? task.description.slice(20) : "N/A",
     dueDate: dayjs(task.dueDate).format("YYYY-MM-DD HH:mm"),
@@ -97,18 +100,51 @@ export default function Page({ params }: { params: { id: string } }) {
     status: task.status ? task.status : "N/A",
   }));
 
-  // Column Definitions: Defines & controls grid columns.
-  const [colDefs, setColDefs] = useState<ColDef<Task>[]>([
-    { field: "title", filter: true },
-    { field: "description", filter: true },
-    { field: "dueDate", filter: true, sort: "desc" },
-    { field: "priority", filter: true },
-    { field: "status", filter: true },
-  ]);
+  function dateComparator(date1: string, date2: string) {
+    const date1Number = dayjs(date1).unix();
+    const date2Number = dayjs(date2).unix();
+    if (date1Number === null && date2Number === null) {
+      return 0;
+    }
+    if (date1Number === null) {
+      return -1;
+    }
+    if (date2Number === null) {
+      return 1;
+    }
+    return date1Number - date2Number;
+  }
 
-  const defaultColDef = {
-    flex: 1,
-  };
+  // Column Definitions: Defines & controls grid columns.
+  const colDefs = useMemo(() => {
+    return [
+      { field: "id", hide: true },
+      { field: "title", filter: true },
+      { field: "description", filter: true },
+      {
+        field: "dueDate",
+        filter: true,
+        comparator: dateComparator,
+      },
+      { field: "priority", filter: true },
+      { field: "status", filter: true },
+      {
+        field: "actions",
+        headerName: "Details",
+        cellRenderer: TaskCellRenderer,
+        sortable: false,
+        filter: false,
+      },
+    ];
+  }, []);
+
+  const defaultColDef = useMemo<ColDef>(() => {
+    return {
+      filter: "agTextColumnFilter",
+      floatingFilter: true,
+      flex: 1,
+    };
+  }, []);
 
   return (
     <main className="p-12">
@@ -157,8 +193,8 @@ export default function Page({ params }: { params: { id: string } }) {
         style={{ width: "100%", height: "100%" }}
       >
         <AgGridReact
-          rowData={TaskData}
           columnDefs={colDefs}
+          rowData={TaskData}
           defaultColDef={defaultColDef}
           pagination={true}
         />
