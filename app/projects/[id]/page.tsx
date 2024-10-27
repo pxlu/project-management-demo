@@ -161,7 +161,7 @@ export default function Page({ params }: { params: { id: string } }) {
           {project.title}
         </h1>
         <button
-          className="rounded-2xl bg-[#579dff] w-1/12 h-10 px-4 float-right mr-10"
+          className="rounded-2xl bg-[#579dff] h-10 px-4 float-right mr-10"
           onClick={handleCreateTask}
         >
           <span className="font-sans font-semibold"> + New Task</span>

@@ -1,4 +1,13 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import {
+  type ClientSchema,
+  a,
+  defineData,
+  defineFunction,
+} from "@aws-amplify/backend";
+
+const taskHandler = defineFunction({
+  entry: "./tasks/handler.ts",
+});
 
 const schema = a.schema({
   Task: a
@@ -6,8 +15,8 @@ const schema = a.schema({
       title: a.string(),
       description: a.string(),
       dueDate: a.datetime(),
-      priority: a.enum(["high", "medium", "low"]),
-      status: a.enum(["todo", "in_progress", "completed"]),
+      priority: a.ref("PriorityEnum"),
+      status: a.ref("StatusEnum"),
       owners: a
         .string()
         .array()
@@ -15,6 +24,7 @@ const schema = a.schema({
           allow.ownersDefinedIn("owners").to(["read"]),
           allow.owner(),
         ]),
+      owner: a.string().authorization((allow) => [allow.owner().to(["read"])]),
       projectId: a
         .id()
         .authorization((allow) => [
@@ -26,19 +36,66 @@ const schema = a.schema({
     .authorization((allow) => [allow.ownersDefinedIn("owners"), allow.owner()]),
   Project: a
     .model({
-      title: a.string(),
-      description: a.string(),
-      startDate: a.datetime(),
-      endDate: a.datetime(),
+      title: a
+        .string()
+        .authorization((allow) => [
+          allow.owner(),
+          allow.ownersDefinedIn("teamMembers").to(["read"]),
+        ]),
+      description: a
+        .string()
+        .authorization((allow) => [
+          allow.owner(),
+          allow.ownersDefinedIn("teamMembers").to(["read"]),
+        ]),
+      startDate: a
+        .datetime()
+        .authorization((allow) => [
+          allow.owner(),
+          allow.ownersDefinedIn("teamMembers").to(["read"]),
+        ]),
+      endDate: a
+        .datetime()
+        .authorization((allow) => [
+          allow.owner(),
+          allow.ownersDefinedIn("teamMembers").to(["read"]),
+        ]),
       createdAt: a.datetime(),
       updatedAt: a.datetime(),
-      priority: a.enum(["high", "medium", "low"]),
-      status: a.enum(["on_hold", "in_progress", "completed"]),
+      priority: a
+        .ref("PriorityEnum")
+        .authorization((allow) => [
+          allow.owner(),
+          allow.ownersDefinedIn("teamMembers").to(["read"]),
+        ]),
+      status: a
+        .ref("StatusEnum")
+        .authorization((allow) => [
+          allow.owner(),
+          allow.ownersDefinedIn("teamMembers").to(["read"]),
+        ]),
       tasks: a.hasMany("Task", "projectId"),
       teamMembers: a.string().array(),
       owner: a.string().authorization((allow) => [allow.owner().to(["read"])]),
     })
     .authorization((allow) => allow.owner()),
+  PriorityEnum: a.enum(["high", "medium", "low"]),
+  StatusEnum: a.enum(["on_hold", "in_progress", "completed"]),
+
+  // CreateTask: a
+  //   .mutation()
+  //   .arguments({
+  //     title: a.string(),
+  //     description: a.string(),
+  //     dueDate: a.datetime(),
+  //     priority: a.integer(),
+  //     status: a.integer(),
+  //     owners: a.string().array(),
+  //     projectId: a.id(),
+  //   })
+  //   .returns(a.ref("Task"))
+  //   .authorization((allow) => [allow.authenticated()])
+  //   .handler(a),
 });
 
 export type Schema = ClientSchema<typeof schema>;

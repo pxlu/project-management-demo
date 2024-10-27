@@ -54,22 +54,7 @@ export const deleteProject = /* GraphQL */ `
     $input: DeleteProjectInput!
   ) {
     deleteProject(condition: $condition, input: $input) {
-      createdAt
-      description
-      endDate
       id
-      owner
-      priority
-      startDate
-      status
-      tasks {
-        nextToken
-        __typename
-      }
-      teamMembers
-      title
-      updatedAt
-      __typename
     }
   }
 `;
@@ -79,18 +64,7 @@ export const deleteTask = /* GraphQL */ `
     $input: DeleteTaskInput!
   ) {
     deleteTask(condition: $condition, input: $input) {
-      createdAt
-      description
-      dueDate
       id
-      owner
-      owners
-      priority
-      projectId
-      status
-      title
-      updatedAt
-      __typename
     }
   }
 `;
@@ -100,7 +74,6 @@ export const updateProject = /* GraphQL */ `
     $input: UpdateProjectInput!
   ) {
     updateProject(condition: $condition, input: $input) {
-      createdAt
       description
       endDate
       id
@@ -125,7 +98,6 @@ export const updateTask = /* GraphQL */ `
     $input: UpdateTaskInput!
   ) {
     updateTask(condition: $condition, input: $input) {
-      createdAt
       description
       dueDate
       id
