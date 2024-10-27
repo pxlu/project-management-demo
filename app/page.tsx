@@ -18,25 +18,6 @@ const client = generateClient<Schema>({
 
 export default function App() {
   const router = useRouter();
-  const { user } = useAuthenticator((context) => [context.user]);
 
-  useEffect(() => {
-    Hub.listen("auth", (data) => {
-      if (data?.payload?.event === "signedIn") {
-        router.push("/projects");
-      }
-    });
-  }, []);
-
-  return user ? (
-    <WelcomeSplash />
-  ) : (
-    <Authenticator>
-      {({ signOut }) => (
-        <div>
-          <button onClick={signOut}>Sign out</button>
-        </div>
-      )}
-    </Authenticator>
-  );
+  return <WelcomeSplash />;
 }

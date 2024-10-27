@@ -18,7 +18,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <AcmeNavbar />
-          {children}
+          <Authenticator>{() => <div>{children}</div>}</Authenticator>
         </body>
       </html>
     </Authenticator.Provider>
