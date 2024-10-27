@@ -15,8 +15,8 @@ const schema = a.schema({
       title: a.string(),
       description: a.string(),
       dueDate: a.datetime(),
-      priority: a.ref("PriorityEnum"),
-      status: a.ref("StatusEnum"),
+      priority: a.ref("PriorityEnum").required(),
+      status: a.ref("StatusEnum").required(),
       owners: a
         .string()
         .array()
@@ -64,12 +64,14 @@ const schema = a.schema({
       updatedAt: a.datetime(),
       priority: a
         .ref("PriorityEnum")
+        .required()
         .authorization((allow) => [
           allow.owner(),
           allow.ownersDefinedIn("teamMembers").to(["read"]),
         ]),
       status: a
         .ref("StatusEnum")
+        .required()
         .authorization((allow) => [
           allow.owner(),
           allow.ownersDefinedIn("teamMembers").to(["read"]),
