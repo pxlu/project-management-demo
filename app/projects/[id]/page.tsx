@@ -177,7 +177,7 @@ export default function Page({ params }: { params: { id: string } }) {
         isOpen={showCreateTask}
         setModalOpen={setShowCreateTask}
         onSuccess={loadContents}
-        onError={(e: any, m: any) => console.log(m)}
+        onError={(e: any, m: any) => alert(m)}
         projectId={params.id}
       />
 

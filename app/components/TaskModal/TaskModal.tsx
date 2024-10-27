@@ -61,7 +61,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
     <Modal hasCloseBtn={true} setModalOpen={setModalOpen} isOpen={isOpen}>
       <div className="h-[75vh] w-[75vw] text-black">
         <div className="flex flex-row justify-between items-center py-4">
-          <h1 className="text-6xl">{data.title}</h1>
+          <h1 className="text-6xl pl-8">{data.title}</h1>
           <button
             className="rounded-2xl bg-[#ff0000] h-10 px-4 float-right mr-10"
             onClick={handleDeleteTask}

@@ -10,6 +10,9 @@ export const convertStatusText = (statusText: string | null): string => {
     case "on_hold":
       output = "On Hold";
       break;
+    case "todo":
+      output = "To Do";
+      break;
     default:
       output = "Cannot be found";
   }
